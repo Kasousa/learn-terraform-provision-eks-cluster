@@ -1,0 +1,33 @@
+apiVersion: "datadoghq.com/v2alpha1"
+kind: "DatadogAgent"
+metadata:
+  name: "datadog"
+spec:
+  global:
+    clusterName: "kquesso-cluster-XXXXXXXX"
+    registry: "public.ecr.aws/datadog"
+    site: "us5.datadoghq.com"
+    tags:
+      - "env:none"
+    credentials:
+      apiSecret:
+        secretName: "datadog-secret"
+        keyName: "api-key"
+  features:
+    apm:
+      instrumentation:
+        enabled: true
+        targets:
+          - name: "default-target"
+            namespaceSelector:
+              matchNames:
+                - "kafka"
+            ddTraceVersions:
+              java: "1"
+              python: "3"
+              js: "5"
+              php: "1"
+              dotnet: "3"
+    logCollection:
+      enabled: true
+      containerCollectAll: true

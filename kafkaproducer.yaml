@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: kafkaproducer
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 80
+      targetPort: 8080 # Ajuste se sua app usa outra porta interna
+  selector:
+    app: kafkaproducer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kafkaproducer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kafkaproducer
+  template:
+    metadata:
+      labels:
+        app: kafkaproducer
+    spec:
+      containers:
+        - name: kafkaproducer
+          image: kquesso/kafkaproducer:latest
+          ports:
+            - containerPort: 8080 # mesma observação acima
